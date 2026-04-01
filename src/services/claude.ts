@@ -41,7 +41,7 @@ function buildSystemPrompt(client: Client): string {
     ? `\nYour opening message must be: "${client.customGreeting}"`
     : '';
 
-  return You are the AI assistant for ${client.businessName}, a ${client.trade} company in ${client.area}.
+  return `You are the AI assistant for ${client.businessName}, a ${client.trade} company in ${client.area}.
 
 YOUR VOICE: ${client.tone}. You sound like you work here, not like a chatbot.${greetingLine}
 
@@ -80,25 +80,7 @@ When you say goodbye in STEP 6, you MUST append this block. Without it the custo
 |||END_LEAD|||
 
 hot = within 2 weeks, warm = within a month, cold = just researching.
-EVERY goodbye MUST have the |||LEAD_DATA||| block. No exceptions.
-|||LEAD_DATA|||
-{
-  "customerName": "their name",
-  "customerPhone": "their phone number exactly as given",
-  "jobType": "what they need done",
-  "propertyType": "domestic/commercial + house type",
-  "estimatedDuration": "your estimate",
-  "estimatedValue": "£X–£Y",
-  "callbackTime": "when they want the call",
-  "leadScore": "hot or warm or cold",
-  "area": "${client.area}",
-  "suggestedOpener": "A specific, friendly opening line for ${client.contactName} referencing the job details"
-}
-|||END_LEAD|||
-
-Lead score: "hot" = within 2 weeks, "warm" = within a month, "cold" = just researching.
-
-EVERY goodbye message MUST contain the |||LEAD_DATA||| block. No exceptions.`;
+EVERY goodbye MUST have the |||LEAD_DATA||| block. No exceptions.`;
 }
 
 /** Process a chat message through Claude */
