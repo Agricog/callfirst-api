@@ -49,7 +49,7 @@ app.use(
       return origin;
     },
     allowMethods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Admin-Secret'],
+    aallowHeaders: ['Content-Type', 'Authorization', 'X-Admin-Secret', 'x-api-key'],
     maxAge: 86400,
   })
 );
