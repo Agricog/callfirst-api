@@ -11,6 +11,7 @@ import { leadRoute } from './routes/lead.js';
 import { webhookRoute } from './routes/webhook.js';
 import { dashboardRoute } from './routes/dashboard.js';
 import { followUpRoute } from './routes/followup.js';
+import { adminRoute } from './routes/admin.js';
 import { authMiddleware } from './middleware/auth.js';
 import { rateLimitMiddleware } from './middleware/rateLimit.js';
 import { checkDbHealth } from './db/client.js';
@@ -44,10 +45,11 @@ app.use(
       if (origin.endsWith('.callfirst.co.uk')) return origin;
       // Localhost for development
       if (origin.startsWith('http://localhost:')) return origin;
+      // Allow file:// for local admin page
       return origin;
     },
     allowMethods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Admin-Secret'],
     maxAge: 86400,
   })
 );
@@ -102,6 +104,13 @@ app.route('/api/webhook/twilio', webhookRoute);
 // Follow-up execution — called by QStash
 app.use('/api/follow-up/*', rateLimitMiddleware({ max: 60, windowSeconds: 60 }));
 app.route('/api/follow-up', followUpRoute);
+
+// ============================================================
+// ADMIN ROUTES (password protected)
+// ============================================================
+
+app.use('/api/admin/*', rateLimitMiddleware({ max: 10, windowSeconds: 60 }));
+app.route('/api/admin/clients', adminRoute);
 
 // ============================================================
 // 404 + ERROR HANDLERS
