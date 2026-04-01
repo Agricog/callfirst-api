@@ -37,23 +37,19 @@ export async function getClientById(id: string): Promise<Client | null> {
 /** Update client settings (urgency, discount) */
 export async function updateClientSettings(
   clientId: string,
-  settings: { urgencyMode?: boolean; discountPercent?: number }
+  settings: { urgencyMode?: boolean; discountPercent?: number; priceGuidance?: string }
 ): Promise<void> {
   const sql = getDb();
-  if (settings.urgencyMode !== undefined && settings.discountPercent !== undefined) {
-    await sql`
-      UPDATE clients
-      SET urgency_mode = ${settings.urgencyMode}, discount_percent = ${settings.discountPercent}
-      WHERE id = ${clientId}
-    `;
-  } else if (settings.urgencyMode !== undefined) {
-    await sql`
-      UPDATE clients SET urgency_mode = ${settings.urgencyMode} WHERE id = ${clientId}
-    `;
-  } else if (settings.discountPercent !== undefined) {
-    await sql`
-      UPDATE clients SET discount_percent = ${settings.discountPercent} WHERE id = ${clientId}
-    `;
+  const updates: string[] = [];
+  
+  if (settings.urgencyMode !== undefined) {
+    await sql`UPDATE clients SET urgency_mode = ${settings.urgencyMode} WHERE id = ${clientId}`;
+  }
+  if (settings.discountPercent !== undefined) {
+    await sql`UPDATE clients SET discount_percent = ${settings.discountPercent} WHERE id = ${clientId}`;
+  }
+  if (settings.priceGuidance !== undefined) {
+    await sql`UPDATE clients SET price_guidance = ${settings.priceGuidance} WHERE id = ${clientId}`;
   }
 }
 
