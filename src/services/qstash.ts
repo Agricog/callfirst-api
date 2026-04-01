@@ -102,3 +102,16 @@ export async function scheduleLeadFollowUps(
     delaySeconds: 42 * 24 * 60 * 60, // 6 weeks
   });
 }
+
+/** Schedule a Google review request 3 days after job completion */
+export async function scheduleReviewRequest(
+  leadId: string,
+  clientId: string
+): Promise<void> {
+  await scheduleFollowUp({
+    leadId,
+    clientId,
+    type: 'review_request',
+    delaySeconds: 3 * 24 * 60 * 60,
+  });
+}
