@@ -77,7 +77,7 @@ dashboardRoute.get('/stats', async (c) => {
 // PATCH /leads/:id — update lead status
 // ============================================================
 const statusSchema = z.object({
-  status: z.enum(['new', 'contacted', 'quoted', 'won', 'lost', 'dead']),
+  status: z.enum(['new', 'contacted', 'quoted', 'won', 'lost', 'dead', 'completed']),
 });
 
 dashboardRoute.patch('/leads/:id', async (c) => {
@@ -97,6 +97,17 @@ dashboardRoute.patch('/leads/:id', async (c) => {
     // Cancel pending follow-ups if lead is won or lost
     if (parsed.data.status === 'won' || parsed.data.status === 'lost' || parsed.data.status === 'dead') {
       await cancelPendingFollowUps(leadId);
+    }
+
+    // Schedule Google review request when job is marked completed
+    if (parsed.data.status === 'completed' && client.googleReviewUrl) {
+      const { scheduleReviewRequest } = await import('../services/qstash.js');
+      await scheduleReviewRequest(leadId, client.id).catch((err: unknown) => {
+        logger.warn('Failed to schedule review request', {
+          leadId,
+          error: err instanceof Error ? err.message : 'Unknown',
+        });
+      });
     }
 
     logger.info('Lead status updated', {
