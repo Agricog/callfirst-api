@@ -127,6 +127,7 @@ dashboardRoute.get('/settings', async (c) => {
       area: client.area,
       urgencyMode: client.urgencyMode,
       discountPercent: client.discountPercent,
+      priceGuidance: client.priceGuidance,
     });
   } catch (error) {
     logger.error('Dashboard settings error', {
@@ -142,6 +143,7 @@ dashboardRoute.get('/settings', async (c) => {
 const settingsSchema = z.object({
   urgencyMode: z.boolean().optional(),
   discountPercent: z.number().int().min(0).max(50).optional(),
+  priceGuidance: z.string().max(1000).optional(),
 });
 
 dashboardRoute.patch('/settings', async (c) => {
