@@ -24,6 +24,7 @@ export interface Client {
   priceGuidance: string;
   /** Custom opening greeting */
   customGreeting: string;
+  googleReviewUrl: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -43,7 +44,7 @@ export interface Lead {
   area: string;
   conversationLog: ConversationMessage[];
   suggestedOpener: string;
-  status: 'new' | 'contacted' | 'quoted' | 'won' | 'lost' | 'dead';
+  status: 'new' | 'contacted' | 'quoted' | 'won' | 'lost' | 'dead' | 'completed';
   createdAt: string;
   updatedAt: string;
 }
