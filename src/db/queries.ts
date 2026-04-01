@@ -231,6 +231,7 @@ function mapClient(row: Record<string, unknown>): Client {
     sellingPoints: row['selling_points'] as string,
     priceGuidance: row['price_guidance'] as string,
     customGreeting: row['custom_greeting'] as string,
+    googleReviewUrl: row['google_review_url'] as string,
     createdAt: row['created_at'] as string,
     updatedAt: row['updated_at'] as string,
   };
