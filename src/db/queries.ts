@@ -40,7 +40,6 @@ export async function updateClientSettings(
   settings: { urgencyMode?: boolean; discountPercent?: number; priceGuidance?: string }
 ): Promise<void> {
   const sql = getDb();
-  const updates: string[] = [];
   
   if (settings.urgencyMode !== undefined) {
     await sql`UPDATE clients SET urgency_mode = ${settings.urgencyMode} WHERE id = ${clientId}`;
